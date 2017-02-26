@@ -67,10 +67,13 @@ def test_counts():
 
 
 class DeckOfCardsStub(DeckOfCards):
-    counter = 0
     cards = [Card("QUEEN")]
 
+    def __init__(self):
+        super(DeckOfCardsStub, self).__init__()
+        self.counter = 0
+
     def draw(self):
-        card = DeckOfCardsStub.cards[DeckOfCardsStub.counter]
-        DeckOfCardsStub.counter += 1
+        card = DeckOfCardsStub.cards[self.counter]
+        self.counter += 1
         return card

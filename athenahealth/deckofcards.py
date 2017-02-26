@@ -29,6 +29,10 @@ class DeckOfCards(object):
     def draw(self):
         """ Draw a card from the deck """
         endpoint = "draw/?count=1"
+
+        if self.remaining <= 0:
+            raise NoMoreCardsError("No more cards left in this deck")
+
         cards_dictionary = self.make_request(endpoint)
         card = cards_dictionary.get('cards')[0]
         card_value = card.get('value')
@@ -107,3 +111,7 @@ class Card(object):
 
 class DeckOfCardsError(Exception):
     """ Errors related to DeckOfCards API """
+
+
+class NoMoreCardsError(DeckOfCardsError):
+    """ No more cards left in the deck """

@@ -20,3 +20,7 @@ class Game(object):
 
     def get_results(self):
         return self.results
+
+    def reshuffle(self):
+        self.deck.reshuffle()
+        self.results = dict()

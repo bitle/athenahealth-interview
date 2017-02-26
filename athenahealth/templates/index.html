@@ -1,5 +1,7 @@
 <h1>Deck of Card</h1>
-
+{% if error %}
+<h1 style="color: red;">{{ error }}</h1>
+{% endif %}
 <table>
     <tr>
         <th>Card name</th>

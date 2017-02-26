@@ -81,3 +81,6 @@ class Card(object):
             'KING': 13
         }
         return order[self.value]
+
+    def __repr__(self):
+        return self.value

@@ -1,5 +1,3 @@
-from mock import MagicMock, patch
-
 from athenahealth.deckofcards import DeckOfCards, Card
 from athenahealth.game import Game
 
@@ -15,7 +13,8 @@ def test_simple_game():
 
 
 def test_game_with_more_cards():
-    new_game = Game()
+    DeckOfCardsStub.cards = (Card("QUEEN"), Card("JACK"), Card("2"))
+    new_game = Game(deck_class=DeckOfCardsStub)
     card1 = new_game.next_card()
     card2 = new_game.next_card()
     card3 = new_game.next_card()
@@ -41,15 +40,7 @@ def test_reshuffle():
 
 
 def test_sorted_results():
-    cards = (Card("QUEEN"), Card("JACK"), Card("2"))
-
-    class DeckOfCardsStub(DeckOfCards):
-        counter = 0
-
-        def draw(self):
-            card = cards[DeckOfCardsStub.counter]
-            DeckOfCardsStub.counter += 1
-            return card
+    DeckOfCardsStub.cards = (Card("QUEEN"), Card("JACK"), Card("2"))
 
     new_game = Game(deck_class=DeckOfCardsStub)
     new_game.next_card()
@@ -63,16 +54,7 @@ def test_sorted_results():
 
 
 def test_counts():
-    cards = (Card("QUEEN"), Card("QUEEN"), Card("2"))
-
-    class DeckOfCardsStub(DeckOfCards):
-        counter = 0
-
-        def draw(self):
-            card = cards[DeckOfCardsStub.counter]
-            DeckOfCardsStub.counter += 1
-            return card
-
+    DeckOfCardsStub.cards = (Card("QUEEN"), Card("QUEEN"), Card("2"))
     new_game = Game(deck_class=DeckOfCardsStub)
     new_game.next_card()
     new_game.next_card()
@@ -82,3 +64,13 @@ def test_counts():
     print results
     assert results[Card("QUEEN")] == 2
     assert results[Card("2")] == 1
+
+
+class DeckOfCardsStub(DeckOfCards):
+    counter = 0
+    cards = [Card("QUEEN")]
+
+    def draw(self):
+        card = DeckOfCardsStub.cards[DeckOfCardsStub.counter]
+        DeckOfCardsStub.counter += 1
+        return card

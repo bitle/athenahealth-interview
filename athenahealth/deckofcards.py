@@ -1,3 +1,4 @@
+import logging
 import requests
 
 
@@ -16,6 +17,7 @@ class DeckOfCards(object):
         self.remaining = None
 
         self.new_deck()
+        self.log = logging.getLogger(__name__)
 
     def new_deck(self):
         """ Create new deck of cards """
@@ -52,8 +54,12 @@ class DeckOfCards(object):
         """
         deck_id = self.deck_id or "new"
         url = base_url.format(deck_id=deck_id, endpoint=endpoint)
-        response = requests.get(url)
-        return response.json()
+        try:
+            response = requests.get(url)
+            return response.json()
+        except:
+            self.log.exception("Failed to make a request")
+            raise DeckOfCardsError("Connection error")
 
 
 class Card(object):
@@ -90,3 +96,7 @@ class Card(object):
 
     def __eq__(self, other):
         return hasattr(other, 'value') and self.value == other.value
+
+
+class DeckOfCardsError(Exception):
+    """ Errors related to DeckOfCards API """

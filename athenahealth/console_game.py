@@ -12,12 +12,14 @@ def main():
             card = game.next_card()
             print "Your card is: %s" % card.value
         elif input == "reshuffle":
-            print "Your result is: %s" % pretty_results(game.get_results())
+            print "Your results are: %s" % pretty_results(game.get_results())
             game.reshuffle()
             print "New game started"
         elif input in ["quit", "exit", "q", "bye"]:
             print "Have a good day!"
             break
+        elif input == "results":
+            print "Your results are: %s" % pretty_results(game.get_results())
         else:
             print "Unrecognized input"
 

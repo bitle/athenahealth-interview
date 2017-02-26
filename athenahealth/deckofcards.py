@@ -58,9 +58,12 @@ class DeckOfCards(object):
             response = requests.get(url)
             parsed_json = response.json()
             if not parsed_json.get("success"):
+                error = parsed_json.get("error")
                 self.log.error("deckofcardsapi.com returned an error. Content: %s", response.text)
-                raise DeckOfCardsError("deckofcardsapi.com returned an error")
+                raise DeckOfCardsError("deckofcardsapi.com returned an error: %s" % error)
             return parsed_json
+        except DeckOfCardsError:
+            raise
         except:
             self.log.exception("Failed to make a request")
             raise DeckOfCardsError("Connection error")

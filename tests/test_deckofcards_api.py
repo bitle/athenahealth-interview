@@ -1,4 +1,6 @@
-from athenahealth.deckofcards import DeckOfCards, Card
+import pytest
+
+from athenahealth.deckofcards import DeckOfCards, Card, DeckOfCardsError
 
 
 def test_new_deck_of_cards():
@@ -26,3 +28,12 @@ def test_reshuffle():
     new_deck.reshuffle()
     assert new_deck.remaining == DeckOfCards.DECK_SIZE
     assert new_deck.deck_id == deck_id
+
+
+# Disabled to save API calls
+def test_53_cards():
+    new_deck = DeckOfCards()
+
+    with pytest.raises(DeckOfCardsError):
+        for n in xrange(53):
+            new_deck.draw()

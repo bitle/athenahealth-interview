@@ -56,7 +56,11 @@ class DeckOfCards(object):
         url = base_url.format(deck_id=deck_id, endpoint=endpoint)
         try:
             response = requests.get(url)
-            return response.json()
+            parsed_json = response.json()
+            if not parsed_json.get("success"):
+                self.log.error("deckofcardsapi.com returned an error. Content: %s", response.text)
+                raise DeckOfCardsError("deckofcardsapi.com returned an error")
+            return parsed_json
         except:
             self.log.exception("Failed to make a request")
             raise DeckOfCardsError("Connection error")

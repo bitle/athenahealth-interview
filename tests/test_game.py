@@ -1,3 +1,4 @@
+from athenahealth.deckofcards import DeckOfCards, Card
 from athenahealth.game import Game
 
 
@@ -35,3 +36,25 @@ def test_reshuffle():
 
     new_game.reshuffle()
     assert len(new_game.get_results()) == 0
+
+
+def test_sorted_results():
+    cards = (Card("QUEEN"), Card("JACK"), Card("2"))
+
+    class DeckOfCardsStub(DeckOfCards):
+        counter = 0
+
+        def draw(self):
+            card = cards[DeckOfCardsStub.counter]
+            DeckOfCardsStub.counter += 1
+            return card
+
+    new_game = Game(deck_class=DeckOfCardsStub)
+    new_game.next_card()
+    new_game.next_card()
+    new_game.next_card()
+    results = new_game.get_results()
+
+    assert results.popitem(last=False)[0].value == "2"
+    assert results.popitem(last=False)[0].value == "JACK"
+    assert results.popitem(last=False)[0].value == "QUEEN"

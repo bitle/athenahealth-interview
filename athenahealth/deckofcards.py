@@ -84,3 +84,9 @@ class Card(object):
 
     def __repr__(self):
         return self.value
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __eq__(self, other):
+        return hasattr(other, 'value') and self.value == other.value

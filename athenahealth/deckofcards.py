@@ -23,7 +23,11 @@ class DeckOfCards(object):
 
     def draw(self):
         """ Draw a card from the deck """
-        pass
+        endpoint = "draw/?count=1"
+        cards_dictionary = self.make_request(endpoint)
+        card = cards_dictionary.get('cards')[0]
+        value = card.get('value')
+        return Card(value)
 
     def reshuffle(self):
         """ Reshuffle the deck """
@@ -44,3 +48,11 @@ class DeckOfCards(object):
         url = base_url.format(deck_id=deck_id, endpoint=endpoint)
         response = requests.get(url)
         return response.json()
+
+
+class Card(object):
+    """ This class will represent a single card """
+
+    def __init__(self, value):
+        super(Card, self).__init__()
+        self.value = value

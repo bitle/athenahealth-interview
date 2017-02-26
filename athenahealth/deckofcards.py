@@ -18,9 +18,7 @@ class DeckOfCards(object):
     def new_deck(self):
         """ Create new deck of cards """
         endpoint = "new/shuffle/?deck_count=1"
-        url = DeckOfCards.BASE_URL % endpoint
-        response = requests.get(url)
-        deck_id = response.json().get('deck_id')
+        deck_id = self.make_request(endpoint).get('deck_id')
         self.deck_id = deck_id
 
     def draw(self):
@@ -30,3 +28,18 @@ class DeckOfCards(object):
     def reshuffle(self):
         """ Reshuffle the deck """
         pass
+
+    def make_request(self, endpoint, base_url=BASE_URL):
+        """ Make API request to https://deckofcardsapi.com/
+
+        This method returns parsed json
+
+        :param base_url: Base URL for API calls
+        :type base_url: str
+        :param endpoint: Specific endpoint for API call
+        :type endpoint: str
+        :rtype: dict
+        """
+        url = base_url % endpoint
+        response = requests.get(url)
+        return response.json()

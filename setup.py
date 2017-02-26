@@ -35,6 +35,10 @@ setup(
     author_email='damir.suleymanov@gmail.com',
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests'])
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    entry_points={
+        'console_scripts': [
+            'deckofcards = athenahealth.console_game:main'
+        ]
+    }
 )
-

@@ -6,32 +6,38 @@ class DeckOfCards(object):
     See: http://deckofcardsapi.com/
     """
     BASE_URL = "https://deckofcardsapi.com/api/deck/{deck_id}/{endpoint}"
+    DECK_SIZE = 52
 
     def __init__(self):
         """ Initialize new deck class
         """
         super(DeckOfCards, self).__init__()
         self.deck_id = None
+        self.remaining = None
 
         self.new_deck()
 
     def new_deck(self):
         """ Create new deck of cards """
         endpoint = "shuffle/?deck_count=1"
-        deck_id = self.make_request(endpoint).get('deck_id')
-        self.deck_id = deck_id
+        deck_dictionary = self.make_request(endpoint)
+        self.deck_id = deck_dictionary.get('deck_id')
+        self.remaining = deck_dictionary.get('remaining')
 
     def draw(self):
         """ Draw a card from the deck """
         endpoint = "draw/?count=1"
         cards_dictionary = self.make_request(endpoint)
         card = cards_dictionary.get('cards')[0]
-        value = card.get('value')
-        return Card(value)
+        card_value = card.get('value')
+        cards_remaining = cards_dictionary.get('remaining')
+        self.remaining = cards_remaining
+        return Card(card_value)
 
     def reshuffle(self):
         """ Reshuffle the deck """
-        pass
+
+        self.new_deck()
 
     def make_request(self, endpoint, base_url=BASE_URL):
         """ Make API request to https://deckofcardsapi.com/

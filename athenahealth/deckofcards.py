@@ -5,7 +5,7 @@ class DeckOfCards(object):
     """ Class to represent API of DeckOfCards
     See: http://deckofcardsapi.com/
     """
-    BASE_URL = "https://deckofcardsapi.com/api/deck/%s"
+    BASE_URL = "https://deckofcardsapi.com/api/deck/{deck_id}/{endpoint}"
 
     def __init__(self):
         """ Initialize new deck class
@@ -17,7 +17,7 @@ class DeckOfCards(object):
 
     def new_deck(self):
         """ Create new deck of cards """
-        endpoint = "new/shuffle/?deck_count=1"
+        endpoint = "shuffle/?deck_count=1"
         deck_id = self.make_request(endpoint).get('deck_id')
         self.deck_id = deck_id
 
@@ -40,6 +40,7 @@ class DeckOfCards(object):
         :type endpoint: str
         :rtype: dict
         """
-        url = base_url % endpoint
+        deck_id = self.deck_id or "new"
+        url = base_url.format(deck_id=deck_id, endpoint=endpoint)
         response = requests.get(url)
         return response.json()

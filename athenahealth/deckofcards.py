@@ -7,22 +7,21 @@ class DeckOfCards(object):
     """
     BASE_URL = "https://deckofcardsapi.com/api/deck/%s"
 
-    def __init__(self, deck_id):
+    def __init__(self):
         """ Initialize new deck class
-        :param deck_id: Deck id
-        :type deck_id: str
         """
         super(DeckOfCards, self).__init__()
-        self.deck_id = deck_id
+        self.deck_id = None
 
-    @staticmethod
-    def new_deck():
+        self.new_deck()
+
+    def new_deck(self):
         """ Create new deck of cards """
         endpoint = "new/shuffle/?deck_count=1"
         url = DeckOfCards.BASE_URL % endpoint
         response = requests.get(url)
         deck_id = response.json().get('deck_id')
-        return DeckOfCards(deck_id)
+        self.deck_id = deck_id
 
     def draw(self):
         """ Draw a card from the deck """
